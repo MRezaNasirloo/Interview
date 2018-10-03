@@ -5,9 +5,17 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.mrezanasirloo.interview.R
+import com.mrezanasirloo.slick.Presenter
 import kotlinx.android.synthetic.main.activity_main.*
 
-class ActivityMain : AppCompatActivity() {
+class ActivityMain : AppCompatActivity(), ViewMain {
+    override fun updateList(list: Any) {
+
+    }
+
+    @Presenter
+    lateinit var presenterMain: PresenterMain
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
