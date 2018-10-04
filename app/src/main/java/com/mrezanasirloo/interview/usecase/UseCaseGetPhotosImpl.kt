@@ -7,8 +7,8 @@ import com.mrezanasirloo.interview.domain.model.ResponseDomain
 import io.reactivex.Single
 
 class UseCaseGetPhotosImpl(private val api: ApiLenzor) : UseCaseGetPhotos() {
-    override fun execute(parameter: Unit): Single<ResponseDomain> {
-        return api.images()
+    override fun execute(parameter: String): Single<ResponseDomain> {
+        return api.photos(parameter)
                 .map { response ->
                     ResponseDomain(response.photolistbytop.map {
                         PhotoItemDomain(
@@ -20,7 +20,8 @@ class UseCaseGetPhotosImpl(private val api: ApiLenzor) : UseCaseGetPhotos() {
                                 it.imgSrcS,
                                 it.size.replace('X', ':')
                         )
-                    }
+                    },
+                            response.ui.pagingForward.substringAfter("photolistbytop/")
                     )
                 }
     }
