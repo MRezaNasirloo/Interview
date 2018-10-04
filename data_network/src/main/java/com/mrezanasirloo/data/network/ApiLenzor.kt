@@ -5,6 +5,6 @@ import io.reactivex.Single
 import retrofit2.http.GET
 
 interface ApiLenzor {
-    @GET("/photolistbytop")
+    @GET("photolistbytop")
     fun images(): Single<Response>
 }

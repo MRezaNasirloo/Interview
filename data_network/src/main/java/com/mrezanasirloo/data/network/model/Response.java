@@ -13,7 +13,7 @@ public class Response{
 	private Ui ui;
 
 	@SerializedName("photolistbytop")
-	private List<PhotolistbytopItem> photolistbytop;
+	private List<PhotoItem> photolistbytop;
 
 	public void setUi(Ui ui){
 		this.ui = ui;
@@ -23,11 +23,11 @@ public class Response{
 		return ui;
 	}
 
-	public void setPhotolistbytop(List<PhotolistbytopItem> photolistbytop){
+	public void setPhotolistbytop(List<PhotoItem> photolistbytop){
 		this.photolistbytop = photolistbytop;
 	}
 
-	public List<PhotolistbytopItem> getPhotolistbytop(){
+	public List<PhotoItem> getPhotolistbytop(){
 		return photolistbytop;
 	}
 

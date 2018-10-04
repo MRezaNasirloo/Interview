@@ -1,25 +1,46 @@
-package com.mrezanasirloo.interview.ui
+package com.mrezanasirloo.interview.ui.main
 
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import com.mrezanasirloo.interview.App
 import com.mrezanasirloo.interview.R
+import com.mrezanasirloo.interview.domain.model.PhotoItemDomain
+import com.mrezanasirloo.interview.usecase.UseCaseGetPhotosImpl
 import com.mrezanasirloo.slick.Presenter
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 class ActivityMain : AppCompatActivity(), ViewMain {
-    override fun updateList(list: Any) {
-
-    }
-
     @Presenter
     lateinit var presenterMain: PresenterMain
+
+    private val adapterPhotos = AdapterPhotos()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        PresenterMain_Slick.bind(this, AndroidSchedulers.mainThread(), Schedulers.io(), UseCaseGetPhotosImpl(App.api))
+
+        list.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//        list.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        list.adapter = adapterPhotos
+    }
+
+    override fun updateList(list: List<PhotoItemDomain>) {
+        adapterPhotos.update(list)
+    }
+
+
+    override fun error(error: Throwable?) {
+        error?.let {
+            Snackbar.make(list, it.message.toString(), Snackbar.LENGTH_SHORT).show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

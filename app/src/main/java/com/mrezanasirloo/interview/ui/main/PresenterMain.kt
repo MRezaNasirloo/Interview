@@ -1,7 +1,7 @@
-package com.mrezanasirloo.interview.ui
+package com.mrezanasirloo.interview.ui.main
 
 import com.mrezanasirloo.interview.domain.UseCaseGetPhotos
-import com.mrezanasirloo.interview.domain.model.PhotolistbytopItemDomain
+import com.mrezanasirloo.interview.domain.model.PhotoItemDomain
 import com.mrezanasirloo.slick.uni.PartialViewState
 import com.mrezanasirloo.slick.uni.SlickPresenterUni
 import io.reactivex.Scheduler
@@ -12,8 +12,8 @@ class PresenterMain(
         private val useCaseGetPhotosImpl: UseCaseGetPhotos
 ): SlickPresenterUni<ViewMain, StateMain>(main, io) {
     override fun start(view: ViewMain) {
-        val photoList = useCaseGetPhotosImpl.execute(Unit).toObservable()
-                .map { UpdateListLoaded(it.photolistbytopDomain) as PartialViewState<StateMain> }
+        val photoList = useCaseGetPhotosImpl.execute(Unit).toObservable().subscribeOn(io)
+                .map { UpdateListLoaded(it.photoListDomain) as PartialViewState<StateMain> }
                 .startWith(UpdateListLoading())
                 .onErrorReturn { UpdateListError(it) }
 
@@ -23,16 +23,17 @@ class PresenterMain(
     override fun render(state: StateMain, view: ViewMain) {
         println(state)
         view.updateList(state.items)
+        view.error(state.error)
     }
 }
 
 data class StateMain(
-        val items: List<PhotolistbytopItemDomain> = emptyList(),
+        val items: List<PhotoItemDomain> = emptyList(),
         val isLoading: Boolean = false,
         val error: Throwable? = null
 )
 
-class UpdateListLoaded(private val items: List<PhotolistbytopItemDomain>): PartialViewState<StateMain>{
+class UpdateListLoaded(private val items: List<PhotoItemDomain>): PartialViewState<StateMain>{
     override fun reduce(state: StateMain): StateMain {
         return state.copy(items = items, isLoading = false, error = null)
     }

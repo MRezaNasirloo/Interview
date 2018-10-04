@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 import com.google.gson.annotations.SerializedName;
 
 @Generated("com.robohorse.robopojogenerator")
-public class PhotolistbytopItem{
+public class PhotoItem {
 
 	@SerializedName("photocoverLink")
 	private Object photocoverLink;
